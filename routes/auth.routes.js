@@ -15,11 +15,13 @@ router.get('/auth/github', passport.authenticate('github'));
 router.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
+    console.log(req.user)
+    const { user } = req
     // Successful authentication, redirect home.
-    res.status(200).redirect('/');
+    res.status(200).json({ message: 'Login successful!', user});
   });
 
-router.post('/signup', (req, res, next) => {
+router.post('/api/signup', (req, res, next) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
@@ -69,7 +71,7 @@ router.post('/signup', (req, res, next) => {
     .catch(err => next(err));
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/api/login', (req, res, next) => {
   passport.authenticate('local', (err, user, failureDetails) => {
     console.log(req)
     if (err) {
@@ -88,12 +90,12 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.post('/logout', routeGuard, (req, res, next) => {
+router.get('/api/logout', routeGuard, (req, res, next) => {
   req.logout();
   res.status(200).json({ message: 'Logout successful!' });
 });
 
-router.get('/isLoggedIn', (req, res) => {
+router.get('/api/isLoggedIn', (req, res) => {
   if (req.user) {
     req.user.passwordHash = undefined;
     res.status(200).json({ user: req.user });

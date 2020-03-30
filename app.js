@@ -4,6 +4,7 @@ const bodyParser   = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express      = require('express');
 const favicon      = require('serve-favicon');
+const cors         = require('cors');
 const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
@@ -16,6 +17,15 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 const app = express();
 // require database configuration
 require('./configs/db.config');
+
+
+// enable cors
+const corsOption = {
+  origin: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true
+};
+app.use(cors(corsOption));
 
 // Middleware Setup
 app.use(logger('dev'));
@@ -39,7 +49,7 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 
 // default value for title local
-app.locals.title = 'Express - Travelpacker API';
+app.locals.title = 'Express - Ironhack Project 3 - Travelpacking API';
 
 
 // Routes
