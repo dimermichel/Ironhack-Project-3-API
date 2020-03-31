@@ -17,8 +17,11 @@ router.get('/auth/github/callback',
   (req, res) => {
     console.log(req.user)
     const { user } = req
+    req.session.user = user
+    console.log(req.session)
     // Successful authentication, redirect home.
-    res.status(200).json({ message: 'Login successful!', user});
+    //res.status(200).json({ message: 'Login successful!', user});
+    res.redirect('http://localhost:3000')
   });
 
 router.post('/api/signup', (req, res, next) => {
