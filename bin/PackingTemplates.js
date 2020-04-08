@@ -334,7 +334,7 @@ let data = [
   }
 ]
 
-const reformattedObj = data.map(obj => {
+const packList = data.map(obj => {
   const finalObj = {}
   finalObj.title = obj.title
   const nObj = Object.assign(obj.items)
@@ -343,12 +343,13 @@ const reformattedObj = data.map(obj => {
     obj.name = el
     obj.quantity = 1
     obj.checked = false
+    //console.log({obj})
     return obj
   })
   finalObj.items = newObj
-  finalObj.checked = false
+  finalObj.completed = false
   return finalObj
 })
-console.table(reformattedObj)
+//console.table(packList)
 
-module.exports = reformattedObj
+module.exports = packList

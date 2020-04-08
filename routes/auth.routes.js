@@ -101,7 +101,7 @@ router.get('/api/logout', routeGuard, (req, res, next) => {
 router.get('/api/isLoggedIn', (req, res) => {
   if (req.user) {
     req.user.passwordHash = undefined;
-    res.status(200).json({ user: req.user });
+    res.status(200).json({ user: req.user, isLoggedIn: true });
     return;
   }
   res.status(401).json({ message: 'You are not logged in!' });
