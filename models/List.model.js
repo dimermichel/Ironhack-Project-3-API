@@ -9,6 +9,7 @@ const Element = new Schema({
 var List = new Schema({
   title: String,
   items: [Element],
+  type: String,
   completed: Boolean
 });
 

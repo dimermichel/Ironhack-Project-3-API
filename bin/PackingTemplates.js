@@ -1,7 +1,8 @@
 let data = [
   {
     title: "Airplane",
-    items: ["Boarding pass",
+    items: [
+            "Boarding pass",
             "Download Netflix Movie",
             "Books",
             "Eye Mask",
@@ -9,11 +10,13 @@ let data = [
             "Headphones",
             "Neck Pillow",
             "Passport / ID"
-          ]
+          ],
+    type: "Transportation"
   },
   {
     title: "Baby",
-    items: ["Baby Birth Certificate / Passport",
+    items: [
+            "Baby Birth Certificate / Passport",
             "Baby Bottle & Nipples",
             "Baby Car Seat",
             "Baby Clothes",
@@ -42,11 +45,13 @@ let data = [
             "Tissues",
             "Toys",
             "Water And/Or Juice"
-          ]
+          ],
+    type: "Other"
   },
   {
     title: "Beach",
-    items: ["After Sun",
+    items: [
+            "After Sun",
             "Beach Bag",
             "Beach Towel",
             "Beach Umbrella",
@@ -55,29 +60,35 @@ let data = [
             "Sunglasses",
             "Sunscreen",
             "Beach Swimsuit"
-          ]
+          ],
+    type: "Activities"
   },
   {
     title: "Boat",
-    items: ["Boat Tickets",
+    items: [
+            "Boat Tickets",
             "Download Netflix Movie",
             "Books",
             "Seesickness Pills",
             "Passport / ID"
-          ]
+          ],
+    type: "Transportation"
   },
   {
     title: "Bus",
-    items: ["Buss Tickets",
+    items: [
+            "Buss Tickets",
             "Download Netflix Movie",
             "Books",
             "Roadsickness Pills",
             "Passport / ID"
-          ]
+          ],
+    type: "Transportation"
   },
   {
-    title: "Business",
-    items: ["Cufflinks",
+    title: "Formal Clothes",
+    items: [
+            "Cufflinks",
             "Work Shirt",
             "Shoe Polish",
             "Suit Jacket",
@@ -86,11 +97,13 @@ let data = [
             "Work Belt",
             "Work Pants",
             "Work Shoes"
-          ]
+          ],
+    type: "Business"
   },
   {
     title: "Camping",
-    items: ["Cooking Tools",
+    items: [
+            "Cooking Tools",
             "Camping Food",
             "Flashlight",
             "Headlamp",
@@ -108,19 +121,23 @@ let data = [
             "Towel",
             "Utility Knife",
             "Water Filter"
-          ]
+          ],
+    type: "Accomodation"
   },
   {
     title: "Car",
-    items: ["Car keys",
+    items: [
+            "Car keys",
             "Car papers",
             "Driver's License",
             "Check Tires"
-          ]
+          ],
+    type: "Transportation"
   },
   {
     title: "Clothes",
-    items: ["Belt",
+    items: [
+            "Belt",
             "Casual Pants",
             "Casual Shirts",
             "Light Jacket",
@@ -130,20 +147,24 @@ let data = [
             "Socks",
             "Sweater",
             "Underwear",
-          ]
+          ],
+    type: "Essentials"
   },
   {
     title: "Cruise",
-    items: ["Cruise Tickets",
+    items: [
+            "Cruise Tickets",
             "Download Netflix Movie",
             "Books",
             "Seasickness pills",
             "Passport / ID"
-          ]
+          ],
+    type: "Accomodation"
   },
   {
     title: "Essentials",
-    items: ["Condoms",
+    items: [
+            "Condoms",
             "Headache pills",
             "House Key",
             "Medication",
@@ -156,15 +177,18 @@ let data = [
             "Vitamins",
             "Wallet",
             "Watch"
-          ]
+          ],
+    type: "Essentials"
   },
   {
     title: "Family / Friends",
-    items: ["Gifts"]
+    items: ["Gifts"],
+    type: "Accomodation"
   },
   {
     title: "Fitness",
-    items: ["Gym Shoes",
+    items: [
+            "Gym Shoes",
             "Gym Shorts ",
             "Gym Socks",
             "Gym T-shirt",
@@ -172,11 +196,13 @@ let data = [
             "Headphones",
             "Water Bottle",
             "Padlock"
-          ]
+          ],
+    type: "Activities"
   },
   {
     title: "Hiking",
-    items: ["Backpack",
+    items: [
+            "Backpack",
             "Binoculars",
             "Bug Spray",
             "Compass",
@@ -185,22 +211,18 @@ let data = [
             "First Aid Kit",
             "Hiking Shoes",
             "Water Bottle"
-          ]
+          ],
+    type: "Activities"
   },
   {
     title: "Hotel",
-    items: ["Cruise",
-            "Seasickness",
-            "Passport / ID"
-          ]
-  },
-  {
-    title: "Hotel",
-    items: ["Reservation"]
+    items: ["Reservation"],
+    type: "Accomodation"
   },
   {
     title: "International",
-    items: ["Foreign Currency",
+    items: [
+            "Foreign Currency",
             "Medical Insurance Card",
             "Passport / ID",
             "Pen",
@@ -209,11 +231,13 @@ let data = [
             "Check Electronics Voltages",
             "Vaccination Certificates",
             "Visa"
-          ]
+          ],
+    type: "Activities"
   },
   {
     title: "Motorcycle",
-    items: ["Ear Plugs",
+    items: [
+            "Ear Plugs",
             "Helmet",
             "Motorcycle Boots",
             "Motorcycle GPS/Smartphone Mount",
@@ -228,11 +252,13 @@ let data = [
             "Tire Repair Kit",
             "Hard Case For Gadgets",
             "Waterproof Pouch"
-          ]
+          ],
+    type: "Activities"
   },
   {
     title: "Photography",
-    items: ["Batteries",
+    items: [
+            "Batteries",
             "Battery Charger",
             "Camera",
             "Camera Bag",
@@ -240,17 +266,21 @@ let data = [
             "Lenses",
             "Memory Cards",
             "Tripod"
-          ]
+          ],
+    type: "Activities"
   },
   {
     title: "Rental",
-    items: ["Reservation",
+    items: [
+            "Reservation",
             "Sheets"
-          ]
+          ],
+    type: "Accomodation"
   },
   {
     title: "Snow Sports",
-    items: ["Lip Balm",
+    items: [
+            "Lip Balm",
             "Long Underwear",
             "Long-sleeved Shirt",
             "Scarf",
@@ -268,19 +298,23 @@ let data = [
             "Snow Jacket",
             "Snow Pants",
             "Winter Boots"
-          ]
+          ],
+    type: "Activities"
   },
   {
     title: "Swimming",
-    items: ["Goggles",
+    items: [
+            "Goggles",
             "Swimming Cap",
             "Swimsuit",
             "Sandals"
-          ]
+          ],
+    type: "Activities"
   },
   {
     title: "Todo List",
-    items: ["Book Flight",
+    items: [
+            "Book Flight",
             "Book Hotel",
             "Close all windows",
             "Close water/gas faucets",
@@ -289,11 +323,13 @@ let data = [
             "Take out the trash",
             "Unplug electric devices",
             "Water the plants"
-          ]
+          ],
+    type: "Other"
   },
   {
     title: "Personal Care",
-    items: ["Band-Aids",
+    items: [
+            "Band-Aids",
             "Cologne",
             "Contacts",
             "Contacts solution",
@@ -311,15 +347,18 @@ let data = [
             "Floss",
             "Tweezers",
             "Qtips"
-          ]
+          ],
+    type: "Essentials"
   },
   {
     title: "Train",
-    items: ["Train Tickets",
+    items: [
+            "Train Tickets",
             "Download Netflix Movie",
             "Books",
             "Passport / ID"
-          ]
+          ],
+    type: "Transportation"
   },
   {
     title: "Work",
@@ -330,13 +369,15 @@ let data = [
             "Work Badge",
             "Work Phone",
             "Work Phone Charger"
-          ]
+          ],
+    type: "Business"
   }
 ]
 
 const packList = data.map(obj => {
   const finalObj = {}
   finalObj.title = obj.title
+  finalObj.type = obj.type
   const nObj = Object.assign(obj.items)
   const newObj = nObj.map((el) => {
     const obj = {}

@@ -55,7 +55,7 @@ app.locals.title = 'Express - Ironhack Project 3 - Travelpacking API';
 // Routes
 app.use('/', require('./routes/index.routes'));
 app.use('/', require('./routes/auth.routes'));
-// app.use('/', require('./routes/packList.routes'));
+app.use('/', require('./routes/packList.routes'));
 // app.use('/', require('./routes/externalApi.routes'));
 
 module.exports = app;

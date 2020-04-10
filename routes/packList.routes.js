@@ -1,8 +1,7 @@
 const { Router } = require('express');
-
 const router = new Router();
-
 const mongoose = require('mongoose');
+const PackList = require('../bin/PackingTemplates')
 const User = require('../models/User.model');
 const List = require('../models/List.model');
 const Travel = require('../models/Travel.model');
@@ -33,8 +32,9 @@ router.post('/api/travel/:id/delete', routeGuard, (req, res, next) => {
     .catch(err => console.log(err));
 });
 
-router.get('/api/defaultlist', routeGuard, (req, res) => {
-
+// after testing include routeGuard
+router.get('/api/defaultlist', (req, res) => {
+  res.status(200).json(PackList);
 });
 
 router.post('/api/list', routeGuard, (req, res, next) => {
