@@ -2,8 +2,8 @@ const { Schema, model } = require('mongoose');
 
 const Coordinates = new Schema (
   {
-    latitude: Number,
-    longitude: Number
+    lat: Number,
+    lng: Number
   }
 );
 

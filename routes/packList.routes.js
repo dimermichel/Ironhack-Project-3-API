@@ -5,34 +5,144 @@ const List = require("../models/List.model");
 const Travel = require("../models/Travel.model");
 
 const routeGuard = require("../configs/route-guard.config");
-
-router.get("/api/travel", routeGuard, (req, res, next) => {});
-
-router.post("/api/travel", routeGuard, (req, res, next) => {});
-
-router.get("/api/travel/:id/update", routeGuard, (req, res, next) => {});
-
-router.post("/api/travel/:id/update", routeGuard, (req, res, next) => {});
-
-router.post("/api/travel/:id/delete", routeGuard, (req, res, next) => {
-  Travel.findByIdAndRemove(req.params.id)
-    .then((responseFromDB) => {})
+// after testing include routeGuard
+// insert StatusCode to the Responses
+router.get("/api/travel", (req, res, next) => {
+  Travel.find({
+    owner: req.session.user._id,
+  })
+    .then((allTravels) => {
+      console.log(allTravels);
+      res.json({ allTravels });
+    })
     .catch((err) => console.log(err));
 });
 
 // after testing include routeGuard
+router.post("/api/travel", (req, res, next) => {
+  let {
+    city,
+    state_code,
+    country_code,
+    imgURL,
+    coordinates,
+    startDate,
+    endDate,
+    attractions,
+    weather,
+    fullList,
+  } = req.body;
+
+  if (city === "" || startDate === "" || endDate === "") {
+    res.json({
+      message: "Please fill up the required forms.",
+    });
+    return;
+  }
+  const owner = req.session.user._id;
+
+  Travel.create({
+    city,
+    state_code,
+    country_code,
+    imgURL,
+    coordinates,
+    startDate,
+    endDate,
+    attractions,
+    weather,
+    fullList,
+    owner,
+  })
+    .then((createdTravel) => {
+      console.log(createdTravel);
+      Travel.findById(createdTravel._id)
+        .populate("fullList")
+        .then((detailCreatedTravel) => {
+          res.json({ detailCreatedTravel });
+        })
+        .catch((error) => console.log(error));
+    })
+    .catch((error) => console.log(error));
+});
+
+// after testing include routeGuard
+router.get("/api/travel/:id", (req, res, next) => {
+  Travel.findById(req.params.id)
+    .populate("fullList")
+    .then((detailTravel) => {
+      console.log(detailTravel);
+      res.json({
+        travel: detailTravel,
+      });
+    })
+    .catch((err) => console.log(err));
+});
+
+// after testing include routeGuard
+router.post("/api/travel/:id/update", (req, res, next) => {
+  const {
+    city,
+    state_code,
+    country_code,
+    imgURL,
+    coordinates,
+    startDate,
+    endDate,
+    attractions,
+    weather,
+    fullList,
+  } = req.body;
+
+  if (city === "" || startDate === "" || endDate === "") {
+    res.json({
+      message: "Please fill up the required forms.",
+    });
+    return;
+  }
+
+  Travel.findOne({
+    _id: req.params.id,
+  }).then((currentTravel) => {
+    currentTravel.city = city;
+    currentTravel.state_code = state_code;
+    currentTravel.country_code = country_code;
+    currentTravel.imgURL = imgURL;
+    currentTravel.coordinates = coordinates;
+    currentTravel.startDate = startDate;
+    currentTravel.endDate = endDate;
+    currentTravel.attractions = attractions;
+    currentTravel.weather = weather;
+    currentTravel.fullList = fullList;
+    currentTravel
+      .save()
+      .then((updatedTravel) => {
+        console.log(updatedTravel);
+        res.json({ travel: updatedTravel });
+      })
+      .catch((err) => console.log(err));
+  });
+});
+
+// after testing include routeGuard
+router.post("/api/travel/:id/delete", (req, res, next) => {
+  Travel.findByIdAndRemove(req.params.id)
+    .then((responseFromDB) => res.json({ travel: responseFromDB }))
+    .catch((err) => console.log(err));
+});
+
+// after testing include routeGuard
+// Default list with all standard items to check
 router.get("/api/defaultlist", (req, res) => {
   res.status(200).json(PackList);
 });
- 
+
 router.post("/api/list", routeGuard, (req, res, next) => {
-  //console.log({BODY: req.body})
-  //console.log({USER_ID: req.session.user._id})
   const lists = req.body;
 
   if (!req.body) {
     res.json({
-      errorMessage: "You need to have at least one List.",
+      message: "You need to have at least one List.",
     });
     return;
   }
@@ -62,7 +172,7 @@ router.post("/api/list/:id/update", routeGuard, (req, res, next) => {
 
   if (!req.body) {
     res.json({
-      errorMessage: "You need to have at least one List.",
+      message: "You need to have at least one List.",
     });
     return;
   }

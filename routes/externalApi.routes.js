@@ -7,15 +7,10 @@ const Path = require("path");
 const routeGuard = require("../configs/route-guard.config");
 const uploadCloud = require("../configs/cloudinary.config");
 
-
 let photoReference = "";
 
 async function downloadImage(url) {
-  const path = Path.resolve(
-    __dirname,
-    "img",
-    "cityPhoto.jpg"
-  );
+  const path = Path.resolve(__dirname, "img", "cityPhoto.jpg");
   console.log(path);
   const writer = fs.createWriteStream(path);
 
@@ -41,35 +36,45 @@ const triposoAxios = axios.create({
 });
 
 router.post("/image/upload", uploadCloud.single("image"), (req, res, next) => {
-  console.log(">>>>>>>>>>>>>>>>>> sending Image <<<<<<<<<<<<<<<<<<<<< ");
+  console.log(">>>>>>>>>>>>>>>>>> Sending Image <<<<<<<<<<<<<<<<<<<<< ");
   console.log(req);
-  let imageURL = ''
+  let imageURL = "";
   if (req.file) {
     imageURL = req.file.url;
     console.log(imageURL);
   }
-  res.json({message: 'File Uploaded', imageURL})
+  res.json({ message: "File Uploaded", imageURL });
 });
 
 // routeGuard,
 router.get("/api/google/:id", async (req, res, next) => {
   let details = {};
   try {
-    const placeDetails = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${req.params.id}&key=${process.env.MAPS_API_KEY}`)
-      console.log(placeDetails.data);
-      details = { ...placeDetails.data };
-      photoReference = placeDetails.data.result.photos[0].photo_reference;
-      console.log(photoReference);
-      let photoURL = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=${photoReference}&key=${process.env.MAPS_API_KEY}`;
-      await downloadImage(photoURL);
-      const form = new FormData();
-      form.append('image', fs.createReadStream(__dirname +'/img/cityPhoto.jpg'));
-      const cloudinaryResponse = await axios.post(`http://localhost:3001/image/upload`, form, { headers: form.getHeaders() })
-      console.log(cloudinaryResponse.data)
-      res.json({ data: "Fetched City Photo", details, cloudinary: cloudinaryResponse.data });
+    const placeDetails = await axios.get(
+      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${req.params.id}&key=${process.env.MAPS_API_KEY}`
+    );
+    console.log(placeDetails.data);
+    details = { ...placeDetails.data };
+    photoReference = placeDetails.data.result.photos[0].photo_reference;
+    console.log(photoReference);
+    let photoURL = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=${photoReference}&key=${process.env.MAPS_API_KEY}`;
+    await downloadImage(photoURL);
+    const form = new FormData();
+    form.append("image", fs.createReadStream(__dirname + "/img/cityPhoto.jpg"));
+    const cloudinaryResponse = await axios.post(
+      `http://localhost:3001/image/upload`,
+      form,
+      { headers: form.getHeaders() }
+    );
+    console.log(cloudinaryResponse.data);
+    res.json({
+      data: "Fetched City Photo",
+      details,
+      cloudinary: cloudinaryResponse.data,
+    });
   } catch (e) {
-    console.log(err)
-    }
+    console.log(err);
+  }
 });
 
 // Change to POST and Add routeGuard
