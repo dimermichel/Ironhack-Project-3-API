@@ -78,13 +78,12 @@ router.get("/api/google/:id", async (req, res, next) => {
 });
 
 // Change to POST and Add routeGuard
-router.get("/api/triposo", (req, res, next) => {
-  // const {latitude , longitude} = req.body
-  latitude = 52.510872648333674;
-  longitude = 13.358976985577385;
+router.post("/api/triposo", (req, res, next) => {
+  const {lat , lng} = req.body
+
   triposoAxios
     .get(
-      `https://www.triposo.com/api/20200405/poi.json?tag_labels=sightseeing|topattractions&fields=id,name,images,coordinates,score,snippet&annotate=distance:${latitude},${longitude}&distance=20000`
+      `https://www.triposo.com/api/20200405/poi.json?tag_labels=sightseeing|topattractions&fields=id,name,images,coordinates,score,snippet&annotate=distance:${lat},${lng}&distance=20000`
     )
     .then((res) => {
       console.log(res.data);
@@ -96,13 +95,12 @@ router.get("/api/triposo", (req, res, next) => {
 });
 
 // Change to POST and Add routeGuard
-router.get("/api/weatherbit", (req, res) => {
-  // const {latitude , longitude} = req.body
-  latitude = 52.510872648333674;
-  longitude = 13.358976985577385;
+router.post("/api/weatherbit", (req, res) => {
+  const {lat , lng} = req.body
+
   axios
     .get(
-      `https://api.weatherbit.io/v2.0/forecast/daily?lat=${latitude}&lon=${longitude}&key=${process.env.WEATHERBIT_KEY}`
+      `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&key=${process.env.WEATHERBIT_KEY}`
     )
     .then((res) => {
       console.log(res.data);
