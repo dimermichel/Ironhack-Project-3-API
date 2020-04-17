@@ -85,9 +85,9 @@ router.post("/api/triposo", (req, res, next) => {
     .get(
       `https://www.triposo.com/api/20200405/poi.json?tag_labels=sightseeing|topattractions&fields=id,name,images,coordinates,score,snippet&annotate=distance:${lat},${lng}&distance=20000`
     )
-    .then((res) => {
-      console.log(res.data);
-      res.json({ data: res.data });
+    .then((responseFromAPI) => {
+      //console.log(res.data);
+      res.json(responseFromAPI.data);
     })
     .catch((err) => {
       res.json(err);
@@ -102,9 +102,9 @@ router.post("/api/weatherbit", (req, res) => {
     .get(
       `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&key=${process.env.WEATHERBIT_KEY}`
     )
-    .then((res) => {
-      console.log(res.data);
-      res.json({ data: res.data });
+    .then((responseFromAPI) => {
+      console.log(responseFromAPI.data);
+      res.json(responseFromAPI.data);
     })
     .catch((err) => {
       res.json(err);
