@@ -2,10 +2,11 @@ const { Router } = require("express");
 const axios = require("axios");
 const router = new Router();
 const fs = require("fs");
-var FormData = require("form-data");
+const FormData = require("form-data");
 const Path = require("path");
 const routeGuard = require("../configs/route-guard.config");
 const uploadCloud = require("../configs/cloudinary.config");
+const BASE_URL= process.env.BASE_URL;
 
 let photoReference = "";
 
@@ -35,15 +36,16 @@ const triposoAxios = axios.create({
   },
 });
 
+// Route that handle the image upload
 router.post("/image/upload", uploadCloud.single("image"), (req, res, next) => {
   console.log(">>>>>>>>>>>>>>>>>> Sending Image <<<<<<<<<<<<<<<<<<<<< ");
-  console.log(req);
+  //console.log(req);
   let imageURL = "";
   if (req.file) {
     imageURL = req.file.url;
-    console.log(imageURL);
+    //console.log(imageURL);
   }
-  res.json({ message: "File Uploaded", imageURL });
+  res.json(imageURL);
 });
 
 // routeGuard,
@@ -53,27 +55,53 @@ router.get("/api/google/:id", async (req, res, next) => {
     const placeDetails = await axios.get(
       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${req.params.id}&key=${process.env.MAPS_API_KEY}`
     );
-    console.log(placeDetails.data);
+    //console.log(placeDetails.data);
     details = { ...placeDetails.data };
     photoReference = placeDetails.data.result.photos[0].photo_reference;
-    console.log(photoReference);
+    //console.log(photoReference);
     let photoURL = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=${photoReference}&key=${process.env.MAPS_API_KEY}`;
     await downloadImage(photoURL);
     const form = new FormData();
     form.append("image", fs.createReadStream(__dirname + "/img/cityPhoto.jpg"));
     const cloudinaryResponse = await axios.post(
-      `http://localhost:3001/image/upload`,
+      `${BASE_URL}/image/upload`,
       form,
       { headers: form.getHeaders() }
     );
     console.log(cloudinaryResponse.data);
-    res.json({
-      data: "Fetched City Photo",
-      details,
-      cloudinary: cloudinaryResponse.data,
-    });
+    // Filtering the Data before sending a response
+    const { name, address_components, geometry } = details.result;
+    const imageURL = cloudinaryResponse.data;
+    const newTravel = {};
+    const startDate = new Date();
+    let endDate = new Date();
+    // Creating a default endDate of 16 days because of Weather API limitations
+    endDate.setDate(endDate.getDate() + 16);
+    const state_code = address_components.filter(el => el.types.includes('administrative_area_level_1'))[0].short_name
+    const country_code = address_components.filter(el => el.types.includes('country'))[0].short_name
+    const country = address_components.filter(el => el.types.includes('country'))[0].long_name
+    newTravel.city = name;
+    newTravel.imageURL = imageURL;
+    newTravel.coordinates = {}
+    newTravel.coordinates.lat = geometry.location.lat;
+    newTravel.coordinates.lng = geometry.location.lng;
+    if (state_code) newTravel.state_code = state_code;
+    if (country_code) newTravel.country_code = country_code;
+    if (country) newTravel.country = country;
+    newTravel.startDate = startDate;
+    newTravel.endDate = endDate;  
+    const attractions = await axios.post(`${BASE_URL}/api/triposo`,
+    newTravel.coordinates)
+    //console.log({attractions})  
+    newTravel.attractions = attractions.data;
+    const weather = await axios.post(`${BASE_URL}/api/weatherbit`,
+    newTravel.coordinates)  
+    newTravel.weather = weather.data;
+    
+    res.json(newTravel);
   } catch (e) {
     console.log(err);
+    res.json(err);
   }
 });
 
@@ -86,8 +114,20 @@ router.post("/api/triposo", (req, res, next) => {
       `https://www.triposo.com/api/20200405/poi.json?tag_labels=sightseeing|topattractions&fields=id,name,images,coordinates,score,snippet&annotate=distance:${lat},${lng}&distance=20000`
     )
     .then((responseFromAPI) => {
-      //console.log(res.data);
-      res.json(responseFromAPI.data);
+      // Filtering the response from API to return only the important variables to our Model
+      const filteredAttractionsArr = responseFromAPI.data.results.map((el) => {
+        const { name, coordinates, score, snippet, images } = el;
+        const filteredAttractionsArr = {};
+        filteredAttractionsArr.name = name;
+        filteredAttractionsArr.coordinates = {};
+        filteredAttractionsArr.coordinates.lat = coordinates.latitude;
+        filteredAttractionsArr.coordinates.lnt = coordinates.longitude;
+        filteredAttractionsArr.score = score;
+        filteredAttractionsArr.snippet = snippet;
+        filteredAttractionsArr.imageURL = images[0].sizes.medium.url;
+        return filteredAttractionsArr;
+      });
+      res.json(filteredAttractionsArr);
     })
     .catch((err) => {
       res.json(err);
@@ -96,15 +136,29 @@ router.post("/api/triposo", (req, res, next) => {
 
 // Change to POST and Add routeGuard
 router.post("/api/weatherbit", (req, res) => {
-  const {lat , lng} = req.body
+  const {lat , lng} = req.body;
 
   axios
     .get(
       `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&key=${process.env.WEATHERBIT_KEY}`
     )
     .then((responseFromAPI) => {
-      console.log(responseFromAPI.data);
-      res.json(responseFromAPI.data);
+      //console.log(responseFromAPI.data);
+      // Filtering the response from API to return only the important variables to our Model
+      const filteredWeatherArr = responseFromAPI.data.data.map((el) => {
+        const { datetime, temp, max_temp, min_temp, weather } = el;
+        const { icon, code, description } = weather;
+        const filteredWeatherArr = {};
+        filteredWeatherArr.datetime = datetime;
+        filteredWeatherArr.temp = temp;
+        filteredWeatherArr.max_temp = max_temp;
+        filteredWeatherArr.min_temp = min_temp;
+        filteredWeatherArr.iconURL = `https://res.cloudinary.com/dimermichel/image/upload/v1586324873/ironhackProject3/icon/${icon}.png`;
+        filteredWeatherArr.code = code;
+        filteredWeatherArr.description = description;
+        return filteredWeatherArr;
+      });
+      res.json(filteredWeatherArr);
     })
     .catch((err) => {
       res.json(err);

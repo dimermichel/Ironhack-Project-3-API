@@ -34,6 +34,7 @@ const TravelSchema = new Schema(
     city: String,
     state_code: String,
     country_code: String,
+    country: String,
     imgURL: String,
     coordinates: Coordinates,
     startDate: Date,
