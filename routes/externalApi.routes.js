@@ -6,7 +6,7 @@ const FormData = require("form-data");
 const Path = require("path");
 const routeGuard = require("../configs/route-guard.config");
 const uploadCloud = require("../configs/cloudinary.config");
-const BASE_URL= process.env.BASE_URL;
+const BASE_URL = process.env.BASE_URL;
 
 let photoReference = "";
 
@@ -68,7 +68,7 @@ router.get("/api/google/:id", async (req, res, next) => {
       form,
       { headers: form.getHeaders() }
     );
-    console.log(cloudinaryResponse.data);
+    //console.log(cloudinaryResponse.data);
     // Filtering the Data before sending a response
     const { name, address_components, geometry } = details.result;
     const imageURL = cloudinaryResponse.data;
@@ -77,27 +77,37 @@ router.get("/api/google/:id", async (req, res, next) => {
     let endDate = new Date();
     // Creating a default endDate of 16 days because of Weather API limitations
     endDate.setDate(endDate.getDate() + 16);
-    const state_code = address_components.filter(el => el.types.includes('administrative_area_level_1'))[0].short_name
-    const country_code = address_components.filter(el => el.types.includes('country'))[0].short_name
-    const country = address_components.filter(el => el.types.includes('country'))[0].long_name
+    const state_code = address_components.filter((el) =>
+      el.types.includes("administrative_area_level_1")
+    )[0].short_name;
+    const country_code = address_components.filter((el) =>
+      el.types.includes("country")
+    )[0].short_name;
+    const country = address_components.filter((el) =>
+      el.types.includes("country")
+    )[0].long_name;
     newTravel.city = name;
     newTravel.imageURL = imageURL;
-    newTravel.coordinates = {}
+    newTravel.coordinates = {};
     newTravel.coordinates.lat = geometry.location.lat;
     newTravel.coordinates.lng = geometry.location.lng;
     if (state_code) newTravel.state_code = state_code;
     if (country_code) newTravel.country_code = country_code;
     if (country) newTravel.country = country;
     newTravel.startDate = startDate;
-    newTravel.endDate = endDate;  
-    const attractions = await axios.post(`${BASE_URL}/api/triposo`,
-    newTravel.coordinates)
-    //console.log({attractions})  
+    newTravel.endDate = endDate;
+    const attractions = await axios.post(
+      `${BASE_URL}/api/triposo`,
+      newTravel.coordinates
+    );
+    //console.log({attractions})
     newTravel.attractions = attractions.data;
-    const weather = await axios.post(`${BASE_URL}/api/weatherbit`,
-    newTravel.coordinates)  
+    const weather = await axios.post(
+      `${BASE_URL}/api/weatherbit`,
+      newTravel.coordinates
+    );
     newTravel.weather = weather.data;
-    
+
     res.json(newTravel);
   } catch (e) {
     console.log(err);
@@ -107,7 +117,7 @@ router.get("/api/google/:id", async (req, res, next) => {
 
 // Change to POST and Add routeGuard
 router.post("/api/triposo", (req, res, next) => {
-  const {lat , lng} = req.body
+  const { lat, lng } = req.body;
 
   triposoAxios
     .get(
@@ -136,7 +146,7 @@ router.post("/api/triposo", (req, res, next) => {
 
 // Change to POST and Add routeGuard
 router.post("/api/weatherbit", (req, res) => {
-  const {lat , lng} = req.body;
+  const { lat, lng } = req.body;
 
   axios
     .get(
