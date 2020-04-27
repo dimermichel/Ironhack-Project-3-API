@@ -10,7 +10,8 @@ var List = new Schema({
   title: String,
   items: [Element],
   type: String,
-  completed: Boolean
+  completed: Boolean,
+  selected: Boolean
 });
 
 const ListSchema = new Schema(

@@ -13,7 +13,7 @@ router.get("/api/travel", (req, res, next) => {
   })
     .then((allTravels) => {
       console.log(allTravels);
-      res.json({ allTravels });
+      res.json(allTravels);
     })
     .catch((err) => console.log(err));
 });
@@ -59,7 +59,7 @@ router.post("/api/travel", (req, res, next) => {
       Travel.findById(createdTravel._id)
         .populate("fullList")
         .then((detailCreatedTravel) => {
-          res.json({ detailCreatedTravel });
+          res.json( detailCreatedTravel );
         })
         .catch((error) => console.log(error));
     })
@@ -71,10 +71,7 @@ router.get("/api/travel/:id", (req, res, next) => {
   Travel.findById(req.params.id)
     .populate("fullList")
     .then((detailTravel) => {
-      console.log(detailTravel);
-      res.json({
-        travel: detailTravel,
-      });
+      (detailTravel.owner == req.session.user._id) ? res.json( detailTravel ) : res.json({message: 'You must be the owner of this travel to see it.'})
     })
     .catch((err) => console.log(err));
 });
@@ -154,8 +151,9 @@ router.post("/api/list", routeGuard, (req, res, next) => {
   })
     .then((createdList) => {
       console.log(createdList);
+      res.json(createdList);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => res.json(error));
 });
 
 router.get("/api/list/:id", routeGuard, (req, res, next) => {
