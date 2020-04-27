@@ -13,7 +13,7 @@ const routeGuard = require('../configs/route-guard.config');
 router.get('/auth/github', passport.authenticate('github'));
 
 router.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/login' }),
+  passport.authenticate('github', { failureRedirect: process.env.FRONTEND_URL+'/login' }),
   (req, res) => {
     console.log(req.user)
     const { user } = req
