@@ -5,7 +5,7 @@ const Strategy = require('passport-github').Strategy;
 passport.use( new Strategy({
   clientID: process.env.CLIENT_GITHUB_ID,
   clientSecret: process.env.CLIENT_GITHUB_SECRET,
-  callbackURL: '/auth/github/callback'
+  callbackURL: process.env.BASE_URL+'/auth/github/callback'
   }, (accessToken, refreshToken, profile, done) => {
       // check if user already exists in our own db
       User.findOne({githubId: profile.id}).then((currentUser) => {
