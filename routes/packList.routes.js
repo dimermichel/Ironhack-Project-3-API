@@ -24,6 +24,7 @@ router.post("/api/travel", (req, res, next) => {
     city,
     state_code,
     country_code,
+    country,
     imgURL,
     coordinates,
     startDate,
@@ -45,6 +46,7 @@ router.post("/api/travel", (req, res, next) => {
     city,
     state_code,
     country_code,
+    country,
     imgURL,
     coordinates,
     startDate,
@@ -82,6 +84,7 @@ router.post("/api/travel/:id/update", (req, res, next) => {
     city,
     state_code,
     country_code,
+    country,
     imgURL,
     coordinates,
     startDate,
@@ -104,6 +107,7 @@ router.post("/api/travel/:id/update", (req, res, next) => {
     currentTravel.city = city;
     currentTravel.state_code = state_code;
     currentTravel.country_code = country_code;
+    currentTravel.country = country;
     currentTravel.imgURL = imgURL;
     currentTravel.coordinates = coordinates;
     currentTravel.startDate = startDate;

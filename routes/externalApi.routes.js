@@ -87,7 +87,7 @@ router.get("/api/google/:id", async (req, res, next) => {
       el.types.includes("country")
     )[0].long_name;
     newTravel.city = name;
-    newTravel.imageURL = imageURL;
+    newTravel.imgURL = imageURL;
     newTravel.coordinates = {};
     newTravel.coordinates.lat = geometry.location.lat;
     newTravel.coordinates.lng = geometry.location.lng;
@@ -134,7 +134,7 @@ router.post("/api/triposo", (req, res, next) => {
         filteredAttractionsArr.coordinates.lnt = coordinates.longitude;
         filteredAttractionsArr.score = score;
         filteredAttractionsArr.snippet = snippet;
-        filteredAttractionsArr.imageURL = images[0].sizes.medium.url;
+        filteredAttractionsArr.imgURL = images[0].sizes.medium.url;
         return filteredAttractionsArr;
       });
       res.json(filteredAttractionsArr);
