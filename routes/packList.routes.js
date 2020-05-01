@@ -8,8 +8,13 @@ const routeGuard = require("../configs/route-guard.config");
 // after testing include routeGuard
 // insert StatusCode to the Responses
 router.get("/api/travel", (req, res, next) => {
+  let owner = "";
+  owner = req.user._id
+    ? req.user._id.toString()
+    : req.session.user._id.toString();
+
   Travel.find({
-    owner: req.session.user._id,
+    owner: owner,
   })
     .then((allTravels) => {
       console.log(allTravels);
@@ -40,7 +45,11 @@ router.post("/api/travel", (req, res, next) => {
     });
     return;
   }
-  const owner = req.session.user._id;
+
+  let owner = "";
+  owner = req.user._id
+    ? req.user._id.toString()
+    : req.session.user._id.toString();
 
   Travel.create({
     city,
@@ -61,7 +70,7 @@ router.post("/api/travel", (req, res, next) => {
       Travel.findById(createdTravel._id)
         .populate("fullList")
         .then((detailCreatedTravel) => {
-          res.json( detailCreatedTravel );
+          res.json(detailCreatedTravel);
         })
         .catch((error) => console.log(error));
     })
@@ -70,10 +79,21 @@ router.post("/api/travel", (req, res, next) => {
 
 // after testing include routeGuard
 router.get("/api/travel/:id", (req, res, next) => {
+  let owner = "";
+  owner = req.user._id
+    ? req.user._id.toString()
+    : req.session.user._id.toString();
+
   Travel.findById(req.params.id)
     .populate("fullList")
     .then((detailTravel) => {
-      (detailTravel.owner == req.session.user._id) ? res.json( detailTravel ) : res.json({message: 'You must be the owner of this travel to see it.'})
+      console.log(owner);
+      const ownerFromDB = detailTravel.owner.toString();
+      ownerFromDB === owner
+        ? res.json(detailTravel)
+        : res.json({
+            message: "You must be the owner of this travel to see it.",
+          });
     })
     .catch((err) => console.log(err));
 });
@@ -127,8 +147,28 @@ router.post("/api/travel/:id/update", (req, res, next) => {
 
 // after testing include routeGuard
 router.post("/api/travel/:id/delete", (req, res, next) => {
-  Travel.findByIdAndRemove(req.params.id)
-    .then((responseFromDB) => res.json({ travel: responseFromDB }))
+  let owner = "";
+  owner = req.user._id
+    ? req.user._id.toString()
+    : req.session.user._id.toString();
+
+  Travel.findById(req.params.id)
+    .then((detailTravel) => {
+      console.log({detailTravel});
+      const ownerFromDB = detailTravel.owner.toString();
+      if (ownerFromDB === owner) {
+        List.findByIdAndRemove(detailTravel.fullList)
+          .then((response) => {
+            console.log({ response });
+            Travel.findByIdAndRemove(req.params.id)
+              .then((responseFromDB) =>
+                res.status(200).json({ travel: responseFromDB })
+              )
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
+      }
+    })
     .catch((err) => console.log(err));
 });
 
@@ -140,6 +180,8 @@ router.get("/api/defaultlist", (req, res) => {
 
 router.post("/api/list", routeGuard, (req, res, next) => {
   const lists = req.body;
+  console.log({ req });
+  console.log({ User: req.user });
 
   if (!req.body) {
     res.json({
@@ -147,7 +189,13 @@ router.post("/api/list", routeGuard, (req, res, next) => {
     });
     return;
   }
-  let owner = req.session.user._id;
+
+  let owner = "";
+  owner = req.user._id
+    ? req.user._id.toString()
+    : req.session.user._id.toString();
+
+  console.log({ owner });
 
   List.create({
     lists,
