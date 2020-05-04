@@ -1,2 +1,30 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet" type="text/css">
+
+<div id="content">
+<div id="wargames">
+<pre><code>
+
+//TRAVELPACKING API
+
+const express = require('express');
+const app = express();
+
+//************************************************
+//home page
+app.get('/', (req, res, next) => {
+    res.sendFile(__dirname + '/views/index.html')
+});
+//************************************************
+
+
+
+
+
+
+
+app.listen(process.env.PORT);
+
+</pre></code>	
+<h2><img src="https://nodejs.org/static/images/logo.svg" alt="nodejs logo" width="150" height="150"></h2>
+</div>
+</div>
