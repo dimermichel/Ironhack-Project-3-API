@@ -7,7 +7,7 @@ const Travel = require("../models/Travel.model");
 const routeGuard = require("../configs/route-guard.config");
 // after testing include routeGuard
 // insert StatusCode to the Responses
-router.get("/api/travel", (req, res, next) => {
+router.get("/api/travel", routeGuard, (req, res, next) => {
   let owner = "";
   owner = req.user._id
     ? req.user._id.toString()
@@ -24,7 +24,7 @@ router.get("/api/travel", (req, res, next) => {
 });
 
 // after testing include routeGuard
-router.post("/api/travel", (req, res, next) => {
+router.post("/api/travel", routeGuard, (req, res, next) => {
   let {
     city,
     state_code,
@@ -78,7 +78,7 @@ router.post("/api/travel", (req, res, next) => {
 });
 
 // after testing include routeGuard
-router.get("/api/travel/:id", (req, res, next) => {
+router.get("/api/travel/:id", routeGuard, (req, res, next) => {
   let owner = "";
   owner = req.user._id
     ? req.user._id.toString()
@@ -99,7 +99,7 @@ router.get("/api/travel/:id", (req, res, next) => {
 });
 
 // after testing include routeGuard
-router.post("/api/travel/:id/update", (req, res, next) => {
+router.post("/api/travel/:id/update", routeGuard, (req, res, next) => {
   const {
     city,
     state_code,
@@ -146,7 +146,7 @@ router.post("/api/travel/:id/update", (req, res, next) => {
 });
 
 // after testing include routeGuard
-router.post("/api/travel/:id/delete", (req, res, next) => {
+router.post("/api/travel/:id/delete", routeGuard, (req, res, next) => {
   let owner = "";
   owner = req.user._id
     ? req.user._id.toString()
@@ -172,7 +172,6 @@ router.post("/api/travel/:id/delete", (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-// after testing include routeGuard
 // Default list with all standard items to check
 router.get("/api/defaultlist", (req, res) => {
   res.status(200).json(PackList);
