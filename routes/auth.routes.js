@@ -15,10 +15,10 @@ router.get('/auth/github', passport.authenticate('github'));
 router.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: process.env.FRONTEND_URL+'/login' }),
   (req, res) => {
-    console.log(req.user)
+    //console.log(req.user)
     const { user } = req
     req.session.user = user
-    console.log(req.session)
+    //console.log(req.session)
     // Successful authentication, redirect home.
     //res.status(200).json({ message: 'Login successful!', user});
     res.redirect(process.env.FRONTEND_URL)
@@ -76,7 +76,7 @@ router.post('/api/signup', (req, res, next) => {
 
 router.post('/api/login', (req, res, next) => {
   passport.authenticate('local', (err, user, failureDetails) => {
-    console.log(req)
+    //console.log(req)
     if (err) {
       res.status(500).json({ message: 'Something went wrong with database query.' });
     }

@@ -66,7 +66,7 @@ router.post("/api/travel", routeGuard, (req, res, next) => {
     owner,
   })
     .then((createdTravel) => {
-      console.log(createdTravel);
+      //console.log(createdTravel);
       Travel.findById(createdTravel._id)
         .populate("fullList")
         .then((detailCreatedTravel) => {
@@ -87,7 +87,7 @@ router.get("/api/travel/:id", routeGuard, (req, res, next) => {
   Travel.findById(req.params.id)
     .populate("fullList")
     .then((detailTravel) => {
-      console.log(owner);
+      //console.log(owner);
       const ownerFromDB = detailTravel.owner.toString();
       ownerFromDB === owner
         ? res.json(detailTravel)
@@ -138,7 +138,7 @@ router.post("/api/travel/:id/update", routeGuard, (req, res, next) => {
     currentTravel
       .save()
       .then((updatedTravel) => {
-        console.log(updatedTravel);
+        //console.log(updatedTravel);
         res.json({ travel: updatedTravel });
       })
       .catch((err) => console.log(err));
@@ -154,12 +154,12 @@ router.post("/api/travel/:id/delete", routeGuard, (req, res, next) => {
 
   Travel.findById(req.params.id)
     .then((detailTravel) => {
-      console.log({detailTravel});
+      //console.log({detailTravel});
       const ownerFromDB = detailTravel.owner.toString();
       if (ownerFromDB === owner) {
         List.findByIdAndRemove(detailTravel.fullList)
           .then((response) => {
-            console.log({ response });
+            //console.log({ response });
             Travel.findByIdAndRemove(req.params.id)
               .then((responseFromDB) =>
                 res.status(200).json({ travel: responseFromDB })
@@ -179,8 +179,8 @@ router.get("/api/defaultlist", (req, res) => {
 
 router.post("/api/list", routeGuard, (req, res, next) => {
   const lists = req.body;
-  console.log({ req });
-  console.log({ User: req.user });
+  //console.log({ req });
+  //console.log({ User: req.user });
 
   if (!req.body) {
     res.json({
@@ -194,7 +194,7 @@ router.post("/api/list", routeGuard, (req, res, next) => {
     ? req.user._id.toString()
     : req.session.user._id.toString();
 
-  console.log({ owner });
+  //console.log({ owner });
 
   List.create({
     lists,
@@ -234,7 +234,7 @@ router.post("/api/list/:id/update", routeGuard, (req, res, next) => {
       currentList
         .save()
         .then((updatedList) => {
-          console.log(updatedList);
+          //console.log(updatedList);
           res.json({ updatedList });
         })
         .catch((err) => console.log(err));

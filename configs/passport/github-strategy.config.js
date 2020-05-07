@@ -11,7 +11,7 @@ passport.use( new Strategy({
       User.findOne({githubId: profile.id}).then((currentUser) => {
           if(currentUser){
               // already have this user
-              console.log('user is: ', currentUser);
+              //console.log('user is: ', currentUser);
               done(null, currentUser);
           } else {
               // if not, create user in our db
@@ -21,7 +21,7 @@ passport.use( new Strategy({
                   profileUrl: profile._json.avatar_url,
                   strategy: 'github'
               }).save().then((newUser) => {
-                  console.log('created new user: ', newUser);
+                  //console.log('created new user: ', newUser);
                   done(null, newUser);
               });
           }

@@ -12,7 +12,7 @@ let photoReference = "";
 
 async function downloadImage(url) {
   const path = Path.resolve(__dirname, "img", "cityPhoto.jpg");
-  console.log(path);
+  //console.log(path);
   const writer = fs.createWriteStream(path);
 
   const response = await axios({
@@ -38,11 +38,11 @@ const triposoAxios = axios.create({
 
 // Route that handle the image upload
 router.post("/image/upload", uploadCloud.single("image"), (req, res, next) => {
-  console.log(">>>>>>>>>>>>>>>>>> Sending Image <<<<<<<<<<<<<<<<<<<<< ");
-  //console.log(req);
+  //console.log(">>>>>>>>>>>>>>>>>> Sending Image <<<<<<<<<<<<<<<<<<<<< ");
+  //console.log(req.file);
   let imageURL = "";
   if (req.file) {
-    imageURL = req.file.url;
+    imageURL = req.file.secure_url;
     //console.log(imageURL);
   }
   res.json(imageURL);
